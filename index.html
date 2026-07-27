@@ -3,32 +3,185 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
 <title>Assinaturas — Alpha Ultrapress</title>
 <style>
-  body { margin:0; padding:24px; background:#f4f5f7; font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif; color:#1a1a1a; }
-  h1 { font-size:18px; margin:0 0 4px; }
-  p.sub { margin:0 0 24px; color:#666; font-size:13px; }
-  .card { background:#fff; border:1px solid #e2e4e8; border-radius:8px; padding:14px; margin-bottom:16px; max-width:1200px; }
-  .card h2 { font-size:13px; margin:0 0 10px; color:#444; font-weight:600; }
-  .card img { display:block; width:100%; height:auto; }
-  code { background:#eef0f3; padding:2px 5px; border-radius:3px; font-size:12px; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:28px 20px 60px; background:#f4f5f7; font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif; color:#1c1e21; }
+  .wrap { max-width:1120px; margin:0 auto; }
+  h1 { font-size:20px; margin:0 0 6px; }
+  .sub { color:#5c6470; font-size:13px; margin:0 0 8px; line-height:1.55; }
+  .howto { background:#fff; border:1px solid #e2e4e8; border-left:3px solid #1c1e21; border-radius:6px; padding:14px 18px; margin:18px 0 26px; font-size:13px; line-height:1.7; }
+  .howto .t { font-weight:600; margin-bottom:8px; }
+  .howto ol { margin:0; padding-left:20px; }
+  .howto li { margin-bottom:3px; }
+  .card { background:#fff; border:1px solid #e2e4e8; border-radius:8px; margin-bottom:18px; overflow:hidden; }
+  .head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border-bottom:1px solid #eceef1; flex-wrap:wrap; }
+  .who { font-size:14px; font-weight:600; }
+  .who span { display:block; font-weight:400; color:#6b7280; font-size:12px; margin-top:2px; }
+  .btn { border:0; background:#1c1e21; color:#fff; font-size:13px; font-weight:500; padding:9px 16px; border-radius:5px; cursor:pointer; font-family:inherit; white-space:nowrap; }
+  .btn:hover { background:#35383d; }
+  .btn.done { background:#1a7f4b; }
+  .sig { padding:14px 16px; overflow-x:auto; }
+  .sig img { display:block; }
+  footer { text-align:center; color:#8b929c; font-size:12px; margin-top:34px; }
 </style>
 </head>
 <body>
-<h1>Assinaturas — verificação de imagens</h1>
-<p class="sub">Se todas aparecerem abaixo, as URLs estão públicas e prontas para uso nas assinaturas.</p>
+<div class="wrap">
+  <h1>Assinaturas de e-mail — Alpha Ultrapress</h1>
+  <p class="sub">Cada pessoa tem a sua. Clique em <b>Copiar assinatura</b> e cole no Gmail.</p>
 
-<div class="card"><h2>01 — Anderson Ferreira</h2><img src="/email/anderson/01-topo.jpg" alt="Anderson"></div>
-<div class="card"><h2>02 — Cristiano Braga</h2><img src="/email/cristiano/01-topo.jpg" alt="Cristiano"></div>
-<div class="card"><h2>03 — Leandro Carvalho</h2><img src="/email/leandro/01-topo.jpg" alt="Leandro"></div>
-<div class="card"><h2>04 — Rodrigo Borges</h2><img src="/email/rodrigo/01-topo.jpg" alt="Rodrigo"></div>
-<div class="card"><h2>05 — Lincoln Ramalho</h2><img src="/email/lincoln/01-topo.jpg" alt="Lincoln"></div>
-<div class="card"><h2>06 — Renan Bermudes</h2><img src="/email/renan/01-topo.jpg" alt="Renan"></div>
-<div class="card"><h2>07 — Victor Hugo</h2><img src="/email/victor/01-topo.jpg" alt="Victor"></div>
-<div class="card"><h2>08 — Weslley Fernandes</h2><img src="/email/weslley/01-topo.jpg" alt="Weslley"></div>
-<div class="card"><h2>09 — Institucional</h2><img src="/email/institucional/01-topo.jpg" alt="Institucional"></div>
+  <div class="howto">
+    <div class="t">Como instalar no Gmail</div>
+    <ol>
+      <li>Clique em <strong>Copiar assinatura</strong> na linha da pessoa.</li>
+      <li>No Gmail dela: engrenagem &rarr; <strong>Ver todas as configurações</strong>.</li>
+      <li>Role até <strong>Assinatura</strong> &rarr; <strong>Criar nova</strong> &rarr; dê um nome.</li>
+      <li>Clique dentro do campo e cole com <strong>Ctrl+V</strong>.</li>
+      <li>Em "Padrões da assinatura", selecione-a para novos e-mails e respostas.</li>
+      <li>Role até o fim e clique em <strong>Salvar alterações</strong>.</li>
+    </ol>
+  </div>
 
-<p class="sub">Base das URLs: <code>/email/&lt;pessoa&gt;/&lt;arquivo&gt;.jpg</code></p>
+  <div id="lista"></div>
+
+  <footer>As imagens são carregadas de vercel-deploy-gules-iota-29.vercel.app</footer>
+</div>
+
+<script>
+const BASE = "https://vercel-deploy-gules-iota-29.vercel.app/email";
+const IG = "https://www.instagram.com/alphaultrapress";
+const LI = "https://www.linkedin.com/company/alphaultrapress";
+const SITE = "https://www.alphaultrapress.com.br";
+const WA = "https://wa.me/554335428585";
+
+// larguras em px medidas dos arquivos reais em imagens-web/ (1500px de base)
+const pessoas = [
+  { slug:"anderson",  nome:"Anderson Ferreira",  mail:"andersonferreira@alphaultrapress.com.br", tel:"5543998295857", mailHit:435, mailB:549 },
+  { slug:"cristiano", nome:"Cristiano Braga",    mail:"cristiano.braga@alphaultrapress.com.br",  tel:"5543991123387", mailHit:423, mailB:561 },
+  { slug:"leandro",   nome:"Leandro Carvalho",   mail:"leandrocastelhao@alphaultrapress.com.br", tel:"5543996756867", mailHit:460, mailB:524 },
+  { slug:"rodrigo",   nome:"Rodrigo Borges",     mail:"rodrigo@alphaultrapress.com.br",          tel:"5543991462713", mailHit:350, mailB:634 },
+  { slug:"lincoln",   nome:"Lincoln Ramalho",    mail:"lincoln@alphaultrapress.com.br",          tel:"5543996682849", mailHit:435, mailB:549 },
+  { slug:"renan",     nome:"Renan Bermudes",     mail:"renan@alphaultrapress.com.br",            tel:"5543996194417", mailHit:337, mailB:646 },
+  { slug:"victor",    nome:"Victor Hugo",        mail:"vitormiranda@alphaultrapress.com.br",     tel:"5543991524587", mailHit:441, mailB:542 },
+  { slug:"weslley",   nome:"Weslley Fernandes",  mail:"weslleysilva@alphaultrapress.com.br",     tel:"5543999690414", mailHit:441, mailB:542 }
+];
+
+const W = 1500;
+const pct = n => (Math.round((n / W) * 1000000) / 10000) + "%";
+const img = (src, w, h, alt) =>
+  `<img src="${src}" width="${w}" height="${h}" alt="${alt}" style="display:block;width:100%;height:auto;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" />`;
+const cel = (w, inner) =>
+  `<td width="${pct(w)}" style="width:${pct(w)};padding:0;font-size:0;line-height:0;">${inner}</td>`;
+const link = (href, title, inner, ext) =>
+  `<a href="${href}" ${ext ? 'target="_blank" rel="noopener noreferrer" ' : ''}title="${title}" style="display:block;text-decoration:none;border:0;">${inner}</a>`;
+const TBL = '<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-spacing:0;width:100%;max-width:800px;">';
+
+function montarPessoa(p) {
+  const b = `${BASE}/${p.slug}`;
+  let h = TBL;
+  h += `<tr>${cel(W, img(b+"/01-topo.jpg", W, 307, p.nome))}</tr>`;
+
+  // faixa de icones: 1098+39+5+39+5+39 = 1225, resto = 275 para fechar 1500
+  h += `<tr><td style="padding:0;font-size:0;line-height:0;">${TBL}<tr>`;
+  h += cel(1098, img(b+"/02-ico-sp0.jpg", 1098, 39, ""));
+  h += cel(39, link(IG, "Instagram", img(b+"/02-ico-ig.jpg", 39, 39, "Instagram"), true));
+  h += cel(5, img(b+"/02-ico-sp1.jpg", 5, 39, ""));
+  h += cel(39, link(LI, "LinkedIn", img(b+"/02-ico-li.jpg", 39, 39, "LinkedIn"), true));
+  h += cel(5, img(b+"/02-ico-sp2.jpg", 5, 39, ""));
+  h += cel(39, link(SITE, "Website", img(b+"/02-ico-site.jpg", 39, 39, "Website"), true));
+  h += cel(275, img(b+"/02-ico-fim.jpg", 276, 39, ""));
+  h += `</tr></table></td></tr>`;
+
+  h += `<tr>${cel(W, img(b+"/03-meio.jpg", W, 54, ""))}</tr>`;
+
+  h += `<tr><td style="padding:0;font-size:0;line-height:0;">${TBL}<tr>`;
+  h += cel(517, img(b+"/04-tel-a.jpg", 517, 49, ""));
+  h += cel(251, link("tel:+"+p.tel, "Telefone", img(b+"/04-tel-hit.jpg", 251, 49, "Telefone"), false));
+  h += cel(732, img(b+"/04-tel-b.jpg", 732, 49, ""));
+  h += `</tr></table></td></tr>`;
+
+  h += `<tr>${cel(W, img(b+"/05-gap.jpg", W, 25, ""))}</tr>`;
+
+  h += `<tr><td style="padding:0;font-size:0;line-height:0;">${TBL}<tr>`;
+  h += cel(517, img(b+"/06-mail-a.jpg", 517, 58, ""));
+  h += cel(p.mailHit, link("mailto:"+p.mail, "E-mail", img(b+"/06-mail-hit.jpg", p.mailHit, 58, p.mail), false));
+  h += cel(p.mailB, img(b+"/06-mail-b.jpg", p.mailB, 58, ""));
+  h += `</tr></table></td></tr>`;
+
+  h += `<tr>${cel(W, img(b+"/07-base.jpg", W, 150, ""))}</tr>`;
+  return h + "</table>";
+}
+
+function montarInstitucional() {
+  const b = `${BASE}/institucional`, Wi = 1500;
+  const p2 = n => (Math.round((n / Wi) * 1000000) / 10000) + "%";
+  const c2 = (w, inner) => `<td width="${p2(w)}" style="width:${p2(w)};padding:0;font-size:0;line-height:0;">${inner}</td>`;
+  const T2 = '<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border-spacing:0;width:100%;max-width:800px;">';
+  let h = T2;
+  h += `<tr>${c2(Wi, img(b+"/01-topo.jpg", Wi, 254, "Alpha Ultrapress"))}</tr>`;
+  // 666+39+12+36+9+42+9+46 = 859, resto = 641 para fechar 1500
+  h += `<tr><td style="padding:0;font-size:0;line-height:0;">${T2}<tr>`;
+  h += c2(666, img(b+"/02-ico-sp0.jpg", 666, 46, ""));
+  h += c2(39, link(IG, "Instagram", img(b+"/02-ico-ig.jpg", 39, 46, "Instagram"), true));
+  h += c2(12, img(b+"/02-ico-sp1.jpg", 12, 46, ""));
+  h += c2(36, link(WA, "WhatsApp", img(b+"/02-ico-wa.jpg", 36, 46, "WhatsApp"), true));
+  h += c2(9, img(b+"/02-ico-sp2.jpg", 9, 46, ""));
+  h += c2(42, link(SITE, "Website", img(b+"/02-ico-site.jpg", 42, 46, "Website"), true));
+  h += c2(9, img(b+"/02-ico-sp3.jpg", 9, 46, ""));
+  h += c2(46, link(LI, "LinkedIn", img(b+"/02-ico-li.jpg", 46, 46, "LinkedIn"), true));
+  h += c2(641, img(b+"/02-ico-fim.jpg", 640, 46, ""));
+  h += `</tr></table></td></tr>`;
+  h += `<tr>${c2(Wi, img(b+"/03-base.jpg", Wi, 74, ""))}</tr>`;
+  return h + "</table>";
+}
+
+const itens = pessoas.map(p => ({
+  titulo: p.nome, sub: p.mail, html: montarPessoa(p)
+}));
+itens.push({ titulo: "Institucional", sub: "sem pessoa — inclui WhatsApp", html: montarInstitucional() });
+
+const lista = document.getElementById("lista");
+itens.forEach((it, i) => {
+  const card = document.createElement("div");
+  card.className = "card";
+  const head = document.createElement("div");
+  head.className = "head";
+  head.innerHTML = `<div class="who">${String(i+1).padStart(2,"0")} — ${it.titulo}<span>${it.sub}</span></div>`;
+  const btn = document.createElement("button");
+  btn.className = "btn";
+  btn.textContent = "Copiar assinatura";
+  head.appendChild(btn);
+  const sig = document.createElement("div");
+  sig.className = "sig";
+  sig.innerHTML = it.html;
+  card.appendChild(head);
+  card.appendChild(sig);
+  lista.appendChild(card);
+
+  btn.addEventListener("click", async () => {
+    const r = document.createRange();
+    r.selectNodeContents(sig);
+    const s = window.getSelection();
+    s.removeAllRanges();
+    s.addRange(r);
+    let ok = false;
+    try {
+      const item = new ClipboardItem({
+        "text/html": new Blob([it.html], { type: "text/html" }),
+        "text/plain": new Blob([it.titulo], { type: "text/plain" })
+      });
+      await navigator.clipboard.write([item]);
+      ok = true;
+    } catch (e) {
+      try { ok = document.execCommand("copy"); } catch (e2) { ok = false; }
+    }
+    btn.textContent = ok ? "Copiado! Cole no Gmail" : "Use Ctrl+C agora";
+    btn.classList.toggle("done", ok);
+    if (ok) s.removeAllRanges();
+    setTimeout(() => { btn.textContent = "Copiar assinatura"; btn.classList.remove("done"); }, 3500);
+  });
+});
+</script>
 </body>
 </html>
